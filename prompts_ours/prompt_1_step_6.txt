@@ -1,0 +1,17 @@
+Finally, using all the previous information to guide your reflexion, you will have to write the complete problem using the PDDL language. Don't forget anything previously mentioned as it will probably be useful. 
+
+Before you start, here is an example, from another domain.
+Example text:
+[EXAMPLE TEXT PDDL]
+
+Answer:
+[EXAMPLE PB PDDL]
+
+Before you start, here are also some rules you need to know:
+- The objects cannot be number, like you cannot write 1 or 3 alone. So replace them by h1 and h3 instead or any other notation corresponing to the situation.
+
+Now, it is your turn to translate the text into proper PDDL. 
+Text:
+[PROBLEM NL]
+
+Answer:

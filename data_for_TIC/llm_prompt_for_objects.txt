@@ -1,0 +1,17 @@
+Given a list of object types with their descriptions as JSON. Extract the instances of each object type from the provided text. Follow below steps in order to do so. 
+Step 1. Instances appear as singular nouns in text. Ignore plural nouns. 
+Step 2. Consider only the instances that are explicitly mentioned in the provided text. Do not output instances that are not mentioned in the text. 
+Step 3. If an instance id contains spaces or hyphens, replace them by underscores. 
+Step 4. If an instance id begins with an upper case, then convert it to lower case.  
+
+Object types: [OBJECT TYPE EXAMPLE]
+
+Text: [TEXT EXAMPLE]  
+
+Answer: {’apple’: [’apple1’, ’apple2’], ’orange’: [], ’plate’: [’plate_1’, ’plate_2’, ’plate_3’, ’plate_4’, ’plate_5’], ’table’: [’table1’, ’table2’], ’ball’: [’ball1’, ’ball3’], ’room’: [’hall’], ’kid’: [], ’robot’: [], ’cell’: [’cell_0_1’, ’cell_0_2’, ’cell_1_1’, ’cell_1_2’, ’cell_2_1’, ’cell_2_2’, ’cell_3_1’, ’cell_3_2’]}  
+
+Object types: [OBJECTS DOMAIN]
+
+Text: [TEXT]
+
+Answer:

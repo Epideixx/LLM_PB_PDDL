@@ -1,0 +1,15 @@
+Your goal is to translate a problem PDDL to an accurate description of it, in natural language meant to be read by a human. You need to be as precise as possible such that a human could recode the original Problem PDDL by only using your description and the domain PDDL.
+To guide you, I will first give you an example for such a translation. Feel free to add any explanations before or after the translation, but be sure to put "START TRANSLATION" right before the translation and "END TRANSLATION" right after the end of it.
+
+(Example) Problem PDDL:
+[PB PDDL EXAMPLE]
+
+(Example) Corresponding translation:
+[PB NL EXAMPLE]
+
+Now, it is your turn to do such a translation, for the next problem PDDL.
+
+Problem PDDL : 
+[PB PDDL]
+
+Corresponding translation:

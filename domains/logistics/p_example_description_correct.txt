@@ -1,0 +1,30 @@
+Objects and Locations:
+- 8 objects (o1 to o8)
+- 3 trucks (tbos, tpgh, tla)
+- 2 airplanes (p1, p2)
+- 3 airports (abos, apgh, ala)
+- 3 locations (lbos, lpgh, lla)
+- 3 cities (cpgh, cbos, cla)
+
+Initial State:
+- Objects o1, o2, o3, and o4 are at location lpgh (in Pittsburgh)
+- Objects o5, o6, and o7 are at location lbos (in Boston)
+- Object o8 is at location lla (in Los Angeles)
+- Both airplanes (p1 and p2) are at airport apgh (Pittsburgh airport)
+- Truck tbos is at location lbos (in Boston)
+- Truck tpgh is at location lpgh (in Pittsburgh)
+- Truck tla is at location lla (in Los Angeles)
+
+Goal State:
+The goal is to move the objects to the following locations:
+1. Object o1 to location lbos (Boston)
+2. Object o2 to airport abos (Boston airport)
+3. Object o3 to location lla (Los Angeles)
+4. Object o4 to airport ala (Los Angeles airport)
+5. Object o5 to location lpgh (Pittsburgh)
+6. Object o6 to airport apgh (Pittsburgh airport)
+7. Object o7 to location lpgh (Pittsburgh)
+8. Object o8 to location lpgh (Pittsburgh)
+9. Airplane p1 should not be at airport apgh (Pittsburgh airport)
+
+The problem involves coordinating the movement of objects between different cities using trucks for local transport and airplanes for inter-city transport to achieve the specified goal state.

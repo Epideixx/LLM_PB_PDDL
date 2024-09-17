@@ -1,0 +1,31 @@
+Objects and Locations:
+- 8 objects (o1 to o8)
+- 4 trucks (tbos, tpgh, tla, tny)
+- 2 airplanes (p1, p2)
+- 3 airports (abos, apgh, ala)
+- 4 locations (lbos, lpgh, lla, lny)
+- 4 cities (cpgh, cbos, cla, cny)
+
+Initial State:
+- Objects o1, o2, and o3 are at location lpgh (in Pittsburgh)
+- Objects o4, o5, and o6 are at location lbos (in Boston)
+- Objects o7 and o8 are at location lla (in Los Angeles)
+- Airplane p1 is at airport apgh (Pittsburgh airport)
+- Airplane p2 is at airport ala (Los Angeles airport)
+- Truck tbos is at location lbos (in Boston)
+- Truck tpgh is at location lpgh (in Pittsburgh)
+- Truck tla is at location lla (in Los Angeles)
+
+Goal State:
+The objective is to relocate the objects as follows:
+1. Object o1 to location lbos (Boston)
+2. Object o2 to airport abos (Boston airport)
+3. Object o3 to location lla (Los Angeles)
+4. Object o4 to airport ala (Los Angeles airport)
+5. Object o5 to location lpgh (Pittsburgh)
+6. Object o6 to airport apgh (Pittsburgh airport)
+7. Object o7 to location lny (New York)
+8. Object o8 to location lpgh (Pittsburgh)
+9. Airplane p1 should be at airport abos (Boston airport)
+
+The challenge involves managing the transportation of objects between various cities using trucks for local movement and airplanes for inter-city transport to reach the specified goal state.

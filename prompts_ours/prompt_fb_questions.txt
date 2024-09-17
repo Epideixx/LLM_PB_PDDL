@@ -1,0 +1,53 @@
+Your task is to evaluate if a given problem PDDL is correct and accurately corresponds to the natural description of it, as well as using the provided domain PDDL. You will provide feedback based on the following questions. Note that feedback is only required if the problem PDDL does not match the provided description of it. If no feedback is required, you will simply write "No feedback required."
+1. Are any necessary objects missing?  
+2. Are any unnecessary objects included?  
+3. Are any objects defined with the wrong type?  
+4. Are any unnecessary or incorrect predicates declared?  
+5. Are any necessary predicates missing from the initial state?  
+6. Is anything missing from the goal description?  
+7. Is anything unnecessary included in the goal description?  
+8. Should any predicate be used in a symmetrical manner?
+
+To help you better understand what is expected from you, here are three examples. Those are all based on the same domain PDDL and on the same description.
+
+Domain:
+[DOMAIN LOGISTICS]
+
+Description:
+[PB LOGISTICS NL]
+
+Problem PDDL 1:
+[PB 1]
+
+Feedback:
+[PB 1 FB]
+
+Problem PDDL 2:
+[PB 2]
+
+Feedback:
+[PB 2 FB]
+
+Problem PDDL 3:
+[PB CORRECT]
+
+Feedback:
+No feedback required.
+
+Now it is your turn to provide feedback for a new problem PDDL formulation, in a new domain.
+
+Domain:
+[DOMAIN PDDL]
+
+Description:
+[PB NL]
+
+Problem:
+[PB PDDL GENERATED]
+
+Feedback:
+
+
+
+
+

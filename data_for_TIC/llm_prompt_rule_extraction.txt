@@ -1,0 +1,19 @@
+Given 
+(1) A JSON with object types as keys and list of objects as values. 
+(2) A list of predicates. The predicates of arity one represent properties of objects. The predicates of arity two or more represent relationships of two or more objects. 
+(3) A text describing a planning task. A planning task description consists of initial state and goal state descriptions. 
+
+Translate the provided text following below steps:  
+
+Step 1. Extract the initial state and goal state descriptions.  
+Step 2. Translate each state description by following below rules as applicable. ’〈state〉’ is a placeholder for ’init’ or ’goal’ for sentences of initial state or goal state respectively. While doing so, use only the provided predicates and respect their arity and type of arguments.  
+Step 3. Output the result as a valid ASP Logic Program without any comments or additional text.  
+
+State sentence translation rules: 
+Rule 1. Represent properties of sets of unnamed objects of the same type as ASP Logic Program rules. For example, translate ’apples are clean’ as ’〈state〉(clean(X)) :- object(X, apple).’, where ’apple’ is an object type and ’clean’ is a predicate of arity 1 and argument type apple.  
+Rule 2. Represent properties of named objects as ASP Logic Program facts. For example, translate sentence ’apple1 is red’ as ’〈state〉(red(apple1)).’, where ’apple1’ is an object and ’red’ is a predicate of arity 1 and argument type apple.  
+Rule 3. Represent a relationship all unnamed objects of an object type with a named object as a ASP Logic Program rule. For example, translate ’apples are on the table’ as ’〈state〉(on(X, table)) :- object(X, apple).’ where ’apple’ is an object type, ’table’ is an object of type ’furniture’ and ’on’ is a predicate of arity 2 and argument types [’apple’, ’furniture’].  
+Rule 4. Represent relationships between two or more named objects as ASP Logic Program facts. For example, translate sentence ’apple1 is on plate2’ as ’〈state〉(on(apple1, plate2)).’, where ’apple1’ and ’plate2’ are objects of type ’apple’ and ’plate’ resp, and ’on’ is a predicate of arity 2 and argument types [’fruit, ’plate’].  
+Rule 5. Represent relationships between two or more unnamed objects as ASP Logic Program rules. For example, translate sentence ’cups handles are free’ as ’〈state〉(free(X, Y)) :- cup_handle(X, Y).’, where ’cup_handle’ is a predicate of arity 2 and argument types [’cup’, ’handle’] and ’free’ is a predicate of arity 2 and argument types [’cup’, ’handle’].  
+Rule 6. Represent a bijective map between two sets of unnamed objects as ASP Logic Program facts. For example, translate sentence ’3 balls for 3 kids’ as ’〈state〉(map(ball, play, kid)).’, where ’ball’ and ’kid’ are object types, and ’play’ is a predicate of arity 2 with argument types [’ball’, ’kid’]. For example, translate sentence ’each cell has a ball’ as ’〈state〉(map(cell, cell_ball_map, ball)).’, where ’cell’ and ’ball’ are object types, and ’cell_ball_map’ is a bijective map predicate of arity 2 with argument types [’cell’, ’ball’].  
+Rule 7. Represent objects that denote a cell on a two dimensional grid ’cell_grid’ as ASP Logic Program facts. For example, translate objects ’cell_2_3’ as ’〈state〉(cell_grid(2, 3, cell_2_3)).’, where ’cell_2_3’ is an object and ’cell_grid’ is a provided tertiary predicate.

@@ -1,0 +1,32 @@
+Given the original description of a Problem PDDL, and a translation from another Problem PDDL, your goal is to state wether the two texts describe the same problem PDDL, and if not, you will state the differences between the original one and the provided one. In case the two described problems are similar, you will not provide any feedback except "The descriptions are similar.".
+
+To help you, I will provide three examples. For all of them, here is the original description. 
+(Example) original example:
+[PB NL EXAMPLE]
+
+Example description 1:
+[PB INCORRECT 1]
+
+Feedback:
+[PB INCORRECT 1 EXPLANATION]
+
+Example description 2:
+[PB INCORRECT 2]
+
+Feedback:
+[PB INCORRECT 2 EXPLANATION]
+
+Example description 3:
+[PB CORRECT]
+
+Feedback:
+The descriptions are similar.
+
+Now, it is your turn to check if the descriptions match. Here is the original description:
+Original:
+[PB NL]
+
+And the given description:
+[PB NL GENERATED]
+
+Feedback:

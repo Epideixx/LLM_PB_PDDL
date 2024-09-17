@@ -1,0 +1,14 @@
+Using your understanding of the domain, you will now have to understand a problem, formulated in natural language, which is associated with the previous domain PDDL. Your first mission is to collect the number of objects for each type. 
+
+To guide you, I will provide you with an example which belongs to another domain.
+Text:
+[EXAMPLE PROBLEM NL]
+
+Answer:
+[EXAMPLE NB OBJECTS]
+
+Now it is your turn, for the following problem:
+Text:
+[PROBLEM NL]
+
+Answer:

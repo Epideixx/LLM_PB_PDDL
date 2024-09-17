@@ -1,1 +1,1 @@
-# LLM_PB_PDDL
+"Logistics" will be used as the common example.

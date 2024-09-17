@@ -1,0 +1,8 @@
+Given a domain PDDL, encoding a environment, I want you to extra some information about the types and the predicates.
+Step 1. You will extract all the types, and describe each one of them with a short sentence
+Step 2. You will extract the predicates, write the number of arguments each take as well as the types of these arguments. Finally, you will also provide a short description for each of them.
+
+Here is the domain PDDL:
+[DOMAIN PDDL]
+
+Now, please follow the different steps to provide a deeper understanding of the domain.

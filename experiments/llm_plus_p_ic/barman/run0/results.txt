@@ -1,0 +1,80 @@
+Problem: p11
+Is equivalent : True
+Best cost: 65
+
+Problem: p07
+Is equivalent : True
+Best cost: 51
+
+Problem: p06
+Is equivalent : True
+Best cost: 49
+
+Problem: p10
+Is equivalent : True
+Best cost: 65
+
+Problem: p17
+Is equivalent : True
+Best cost: 126
+
+Problem: p01
+Is equivalent : True
+Best cost: 36
+
+Problem: p16
+Is equivalent : True
+Best cost: 82
+
+Problem: p20
+Is equivalent : True
+Best cost: 145
+
+Problem: p19
+Is equivalent : True
+Best cost: 134
+
+Problem: p03
+Is equivalent : True
+Best cost: 36
+
+Problem: p15
+Is equivalent : True
+Best cost: 106
+
+Problem: p14
+Is equivalent : True
+Best cost: 113
+
+Problem: p02
+Is equivalent : True
+Best cost: 36
+
+Problem: p18
+Is equivalent : True
+Best cost: 117
+
+Problem: p05
+Is equivalent : True
+Best cost: 49
+
+Problem: p13
+Is equivalent : True
+Best cost: 82
+
+Problem: p09
+Is equivalent : True
+Best cost: 65
+
+Problem: p08
+Is equivalent : True
+Best cost: 50
+
+Problem: p12
+Is equivalent : True
+Best cost: 65
+
+Problem: p04
+Is equivalent : True
+Best cost: 36
+

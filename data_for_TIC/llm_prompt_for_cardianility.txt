@@ -1,0 +1,16 @@
+Given a list of object types and their descriptions as JSON. The provided text describes a planning task. The planning task describes an init state and a goal state. I want you to extract information from the provided task description by following below steps: 
+Step 1. Detect the init state description and the goal state description. The init state description is the text from start to begin of goal description. The goal description typically starts with ’Your goal is ...’. 
+Step 2. Extract for each object type T the explicitly mentioned count, width, and height of instances of T from the init state description.  
+
+Object types: [OBJECT TYPE EXAMPLE]  
+
+Text : [TEXT EXAMPLE]  
+
+Answer:  
+{’table’: 2, ’apple’: 4, ’orange’: 3, ’plate’: 5, ’ball’: 3, ’kid’: 3, ’cell’: 8}  
+
+Object types: [OBJECTS DOMAIN]
+
+Text: [TEXT]
+
+Answer:

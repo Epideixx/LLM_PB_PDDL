@@ -1,0 +1,1 @@
+Now you have a better understanding of the domain and the problem we have to deal with, you will have to create and think about rules in this domain, that you should follow.

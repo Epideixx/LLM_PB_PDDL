@@ -1,3 +1,11 @@
+ARCHIVE
+downward
+keys
+*test*
+script_experiments.sh
+tic
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

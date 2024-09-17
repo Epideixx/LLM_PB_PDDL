@@ -1,0 +1,14 @@
+Given the previous information, you will now have to extract the names of each object. 
+
+To guide you, we will keep the same example as previously. As a reminder, here it is.
+Text:
+[EXAMPLE PROBLEM NL]
+
+Answer:
+[EXAMPLE NAME OBJECTS]
+
+Now it is your turn, for our current problem:
+Text:
+[PROBLEM NL]
+
+Answer:

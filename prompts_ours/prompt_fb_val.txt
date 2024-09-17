@@ -1,0 +1,4 @@
+Unfortunately, the result does not follow the PDDL constraints, and there are some syntax issues. Here is a list of precise feedbacks:
+[FEEDBACK]
+
+Please modify the generated PDDL to correct the mentioned issues.

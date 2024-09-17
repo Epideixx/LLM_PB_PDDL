@@ -1,0 +1,6 @@
+No, the two texts do not describe the same problem PDDL. Here are the main differences:
+Number of objects: Here there are only 7 objects (o1 to o7) instead of the correct 8 objects (o1 to o8).
+Initial location of airplanes: Both airplanes (p1 and p2) are described at airport abos (Boston airport) instead of the correct location apgh (Pittsburgh airport).
+Initial location of object o7: o7 is stated at location lla (Los Angeles) instead of the correct location lbos (Boston).
+Omission: Object o8 was completly omitted from both the initial state and goal state descriptions.
+Goal state for airplanes: Here, airplane p2 should not be at airport apgh, while the original problem specified this condition for p1, not p2.

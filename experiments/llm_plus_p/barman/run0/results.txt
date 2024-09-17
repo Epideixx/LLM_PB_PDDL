@@ -1,0 +1,80 @@
+Problem: p11
+Is equivalent : False
+Best cost: 0
+
+Problem: p07
+Is equivalent : False
+Planner failed to find a plan.
+
+Problem: p06
+Is equivalent : False
+Planner failed to find a plan.
+
+Problem: p10
+Is equivalent : True
+Best cost: 65
+
+Problem: p17
+Is equivalent : False
+Planner failed to find a plan.
+
+Problem: p01
+Is equivalent : True
+Best cost: 36
+
+Problem: p16
+Is equivalent : False
+Planner failed to find a plan.
+
+Problem: p20
+Is equivalent : False
+Best cost: 0
+
+Problem: p19
+Is equivalent : False
+Planner failed to find a plan.
+
+Problem: p03
+Is equivalent : False
+Planner failed to find a plan.
+
+Problem: p15
+Is equivalent : False
+Best cost: 0
+
+Problem: p14
+Is equivalent : False
+Best cost: 0
+
+Problem: p02
+Is equivalent : True
+Best cost: 36
+
+Problem: p18
+Checking equivalence took too much time, required to check by hand...
+Best cost: unknown
+
+Problem: p05
+Is equivalent : False
+Planner failed to find a plan.
+
+Problem: p13
+Is equivalent : False
+Best cost: 0
+
+Problem: p09
+Checking equivalence took too much time, required to check by hand...
+Best cost: unknown
+
+Problem: p08
+Is equivalent : False
+Planner failed to find a plan.
+
+Problem: p12
+Is equivalent : True
+Best cost: 65
+
+Problem: p04
+Is equivalent : False
+Planner failed to find a plan.
+

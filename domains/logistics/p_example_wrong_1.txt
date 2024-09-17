@@ -1,0 +1,5 @@
+Here is a full feedback based on the questions and the provided description:
+- The airport in Los Angeles has not been declared in the objects, you should declare the object "ala" (at Los Angeles) and you should declare it as an "airport" in the initial conditions as well as a location. 
+- The airport at Pittsburgh was declared twice in the initial conditions
+- The airport at Pittsburgh (apgh) is wrongly declared at city Los Angeles (cla), and shoudl only be declared at Pittsburgh
+- In the goals, there is a mistake about the final location of of package 4 (o4), which should be at Los Angeles airport (ala), and not at Pittsburgh.

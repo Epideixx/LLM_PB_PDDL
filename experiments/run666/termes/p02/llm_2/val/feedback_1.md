@@ -1,0 +1,1 @@
+'Not' object has no attribute 'name'

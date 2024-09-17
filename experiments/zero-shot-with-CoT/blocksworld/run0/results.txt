@@ -1,0 +1,44 @@
+Problem: p11
+Is equivalent : True
+Best cost: 22
+
+Problem: p07
+Is equivalent : True
+Best cost: 8
+
+Problem: p06
+Is equivalent : True
+Best cost: 12
+
+Problem: p10
+Is equivalent : True
+Best cost: 18
+
+Problem: p17
+Checking equivalence took too much time, required to check by hand...
+Best cost: unknown
+
+Problem: p01
+Is equivalent : True
+Best cost: 0
+
+Problem: p16
+Is equivalent : True
+Best cost: 28
+
+Problem: p20
+Checking equivalence took too much time, required to check by hand...
+Best cost: unknown
+
+Problem: p19
+Checking equivalence took too much time, required to check by hand...
+Best cost: unknown
+
+Problem: p03
+Is equivalent : True
+Best cost: 6
+
+Problem: p15
+Is equivalent : True
+Best cost: 26
+

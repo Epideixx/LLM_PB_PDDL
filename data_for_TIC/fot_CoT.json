@@ -1,0 +1,28 @@
+{
+    "text": "You have 2 tables, 5 plates, 4 apples, and 3 balls for 3 kids. apple1 is on plate_2. apple2 is on plate_1. orange1 is on plate_1. orange3 is on plate_2. ball1 is in first drawer of first table. ball3 is in second drawer of first table. apple3 is in first drawer of second table. apple2 is in second drawer of second table. The apples are red. There are three oranges. The plates are clean. The kids are inside the hall. cell_0_1 cell_0_2 cell_1_1 cell_1_2 cell_2_1 cell_2_2 cell_3_1 cell_3_2 There are 8 cells, each cell has a robot. Your goal is to move the oranges to empty plates. orange1 should be on plate_3, orange2 should be on plate_4, orange3 should be on plate_5. No orange should be unplated. The plates are not clean. Each kid should paint a ball. The kids are inside the hall.",
+    "obj_types": [  
+        {"type": "apple", "description": "The set of apples."}, 
+        {"type": "orange", "description": "The set of oranges."}, 
+        {"type": "plate", "description": "The set of plates."}, 
+        {"type": "table", "description": "The set of tables."}, 
+        {"type": "ball", "description": "The set of balls."}, 
+        {"type": "kid", "description": "The set of kids."}, 
+        {"type": "room", "description": "The set of rooms."}, 
+        {"type": "cell", "description": "The set of cells."}, 
+        {"type": "robot", "description": "The set of robots."} ],
+    "predicates": [  
+        {"predicate": "on", "arity": 2, "argument types": ["apple", "plate"], "description": "on(a, b) means apple a is on plate b."},  
+        {"predicate": "red", "arity": 1, "argument types": ["apple"], "description": "red(a) means apple a is red."},  
+        {"predicate": "clean", "arity": 1, "argument types": ["plate"], "description": "clean(a) means plate a is clean."},  
+        {"predicate": "not_clean", "arity": 1, "argument types": ["plate"], "description": "not_clean(a) means plate a is not clean."},  
+        {"predicate": "empty", "arity": 1, "argument types": ["plate"], "description": "empty(a) means plate a is empty. A plate is empty if there is no apple on it."},  
+        {"predicate": "cell_grid", "arity": 3, "argument types": ["row", "column", "cell"], "description": "cell_grid(a, b, c) means cell a is on row b and column c."},  
+        {"predicate": "unplated", "arity": 0, "argument types": [], "description": "unplated means at least one orange is not on the plate."},  
+        {"predicate": "play", "arity": 2, "argument types": ["ball", "kid"], "description": "play is a bijective map between balls and kids. play(a, b) means ball a is played with by kid b."},  
+        {"predicate": "cell_robot_map", "arity": 2, "argument types": ["cell", "robot"], "description": "cell_robot_map is a bijective map between cells and robots. cell_robot_map(a, b) means cell a has robot b."},  
+        {"predicate": "in_1", "arity": 2, "argument types": ["apple or ball", "table"], "description": "in_1(a, b) means apple or ball a is in first drawer of table b."},  
+        {"predicate": "in_2", "arity": 2, "argument types": ["apple or ball", "table"], "description": "in_2(a, b) means apple or ball a is in second drawer of table b."},  
+        {"predicate": "inside", "arity": 2, "argument types": ["kid", "room"], "description": "inside(a, hall) means kid a is inside hall."} 
+    ]
+
+}
