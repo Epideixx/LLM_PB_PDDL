@@ -1,4 +1,4 @@
-Your task is to evaluate if a given problem PDDL is correct and accurately corresponds to the natural description of it, as well as using the provided domain PDDL. You will provide feedback based on the following questions. Note that feedback is only required if the problem PDDL does not match the provided description of it. If no feedback is required, you will simply write "No feedback required."
+Your task is to evaluate if a given problem PDDL is correct and accurately corresponds to the natural description of it, as well as using the provided domain PDDL. You will provide feedback based on the following questions. Note that feedback is only required if the problem PDDL does not match the provided description of it. If no feedback is required, you will simply conclude with "No feedback required."
 1. Are any necessary objects missing?  
 2. Are any unnecessary objects included?  
 3. Are any objects defined with the wrong type?  
@@ -7,6 +7,8 @@ Your task is to evaluate if a given problem PDDL is correct and accurately corre
 6. Is anything missing from the goal description?  
 7. Is anything unnecessary included in the goal description?  
 8. Should any predicate be used in a symmetrical manner?
+9. Have you used all the predicates from the domain or left some? Explain your choice.
+10. Have you used all the object types from the domain or left some? Explain your choice.
 
 To help you better understand what is expected from you, here are three examples. Those are all based on the same domain PDDL and on the same description.
 

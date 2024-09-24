@@ -1,4 +1,5 @@
-Given the original description of a Problem PDDL, and a translation from another Problem PDDL, your goal is to state wether the two texts describe the same problem PDDL, and if not, you will state the differences between the original one and the provided one. In case the two described problems are similar, you will not provide any feedback except "The descriptions are similar.".
+Given the original description of a Problem PDDL, and a translation from another Problem PDDL, your goal is to state wether a given description describe the same problem PDDL as the provided original one, and if not, you will state the differences between the original one and the provided one. In case the two described problems are similar, you will not provide any feedback except "The descriptions are similar.".
+Please pay attention to the fact the original description may be less descriptive than the proposed one, which is normal.You need to evaluate if the proposed description fits in the original description, not necessarily the other way around.
 
 To help you, I will provide three examples. For all of them, here is the original description. 
 (Example) original example:

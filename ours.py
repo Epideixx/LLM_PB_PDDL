@@ -392,7 +392,7 @@ def generate_pddl_from_feedback(problem:Problem, feedback_prompt:str, llm:LLM):
 def merge_pddls(problem, generated_problems, llm):
  
     # Create the prompt for the final ensemble method
-    prompt = "As expert in PDDL, your mission is to return the final translation from a problem formulated in natural language to a Problem PDDL. To do so, you will be given the domain PDDL, the original description of the task that you have to translate, as well as multiple potential versions of this translation. Your goal is then to either pick one of the translations, or to combine them in a smart way. Before picking the final PDDL translation, you will think and explain your reasoning.\n The final translation will be between 'START TRANSLATION' and 'END TRANSLATION'."
+    prompt = "As expert in PDDL, your mission is to return the final translation from a problem formulated in natural language to a Problem PDDL. To do so, you will be given the domain PDDL, the original description of the task that you have to translate, as well as multiple potential versions of this translation. Your goal is then to combine them in a smart way. Before outputting the final PDDL translation, you will think and explain your reasoning.\n The final translation will be between 'START TRANSLATION' and 'END TRANSLATION'."
     prompt += " Here is the domain PDDL:\n" 
     prompt += problem.domain.get_pddl_representation() + "\n\n"
     prompt += "And this is the description of the task we aim to translate:\n"
@@ -402,6 +402,7 @@ def merge_pddls(problem, generated_problems, llm):
         prompt += f"Potential translation {i+1}:\n"
         prompt += pb.get_pddl_representation()
         prompt += "\n\n"
+    prompt += "Please make the best out of these translations to generate the final PDDL translation."
 
     # Prompt the LLM
     raw_answer = llm.query(prompt)
@@ -546,19 +547,24 @@ def main(problem, problem_example, nb_propositions = 2, model = "gpt-4o", temper
     if save_folder:
         with open(os.path.join(save_folder, "final_pddl.pddl"), 'w') as f:
             f.write(final_pddl.get_pddl_representation())
+        path_merge_conv = os.path.join(save_folder, "merge_llm_conversation.md")
+        llm_merge.save_discussion(path_merge_conv)
 
     return final_pddl
     
 
 if __name__ == "__main__":
 
-    domain = Domain(pddl_string=None, domain_name="barman", from_file_path="domains/barman/domain.pddl")
-    problem = Problem(pddl_string=None, domain=domain, problem_name="p05",from_file_path="domains/barman/p05.pddl",  description_file_path="domains/barman/p05.nl")
+    domain = Domain(pddl_string=None, domain_name="termes", from_file_path="domains/termes/domain.pddl")
+    problem = Problem(pddl_string=None, domain=domain, problem_name="p04",from_file_path="domains/termes/p04.pddl",  description_file_path="domains/termes/p04.nl")
 
     domain_example = Domain(pddl_string=None, domain_name="logistics", from_file_path="domains/logistics/domain.pddl")
     problem_example = Problem(pddl_string=None, domain=domain, problem_name="p_example",from_file_path="domains/logistics/p_example.pddl",  description_file_path="domains/logistics/p_example.nl")
     nb_propositions = 2
     
     # answers, pbs_pddl_generated = sc_cot(problem, domain, nb_propositions=nb_propositions, temperature=0.7, model="gpt-4o", save_folder="test_sc_cot")
-    final_pddl = main(problem, problem_example, nb_propositions=nb_propositions, temperature=0.7, model="gpt-4o", save_folder="experiments/run666/barman/p05", max_iter_fb_val=1, max_iter_fb_questions=1, max_iter_llm_judge=1, temperature_merge=0.1)
-    print(check_if_equivalent(final_pddl, problem))
+    final_pddl = main(problem, problem_example, nb_propositions=nb_propositions, temperature=0.7, model="gpt-4o", save_folder="experiments/run669/termes/p04", max_iter_fb_val=1, max_iter_fb_questions=1, max_iter_llm_judge=1, temperature_merge=0.1)
+    try:
+        print(check_if_equivalent(final_pddl, problem))
+    except:
+        print("Timeout, the process took too long. Please verify by hand the two problems.")
