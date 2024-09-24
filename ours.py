@@ -1,7 +1,7 @@
 from domains_problem import Problem, Domain, check_if_equivalent
 from llm import LLM
 import json
-import numpy as np
+import tiktoken
 import re
 import os
 
@@ -21,8 +21,13 @@ def postprocess_translation(raw_answer):
     else:
         return raw_answer
     
+def count_tokens(text, model = "gpt-4o"):
+    encoding = tiktoken.encoding_for_model(model)
+    num_tokens = len(encoding.encode(text))
+    return num_tokens
     
-def sc_cot(problem:Problem, problem_example:Problem, llm:LLM, nb_propositions:int = 3, save_folder=None, test = False):
+    
+def sc_cot(problem:Problem, problem_example:Problem, llm:LLM, nb_propositions:int = 3, save_folder=None, test = False, count_nb_tokens=False):
     """
     Self-consistency Chain-of-Thought
     Using Chain-of-Thought, using one example, it generates in a multi-step process, a final Problem PDDL
@@ -57,6 +62,7 @@ def sc_cot(problem:Problem, problem_example:Problem, llm:LLM, nb_propositions:in
     problem_nl = problem.get_description_nl()
     problem_pddl_example = problem_example.get_pddl_representation()
     problem_nl_example = problem_example.get_description_nl()
+    count_tokens_sc_soc = [0 for _ in range(nb_propositions)]
     
     # We load an example from another folder, that will be used in Step 2 and 3
     with open("data_for_TIC/fot_CoT.json", 'r') as f:
@@ -74,6 +80,8 @@ def sc_cot(problem:Problem, problem_example:Problem, llm:LLM, nb_propositions:in
         if save_folder:
                 with open(os.path.join(save_folder, f"llm_{i+1}", "sc_cot", f"prompt_1.md"), 'w') as f:
                     f.write(answer)
+        if count_nb_tokens:
+            count_tokens_sc_soc[i] += int(count_tokens(" ".join([message["content"] for message in llm.messages])))
 
     # Step 2: Find cardinality of each object
     with open("prompts_ours/prompt_1_step_2.txt", 'r') as f:
@@ -86,6 +94,8 @@ def sc_cot(problem:Problem, problem_example:Problem, llm:LLM, nb_propositions:in
         if save_folder:
                 with open(os.path.join(save_folder, f"llm_{i+1}", "sc_cot", f"prompt_2.md"), 'w') as f:
                     f.write(answer)
+        if count_nb_tokens:
+            count_tokens_sc_soc[i] += int(count_tokens(" ".join([message["content"] for message in llm.messages])))
 
     # Step 3: Extract the names of the different objects
     with open("prompts_ours/prompt_1_step_3.txt", 'r') as f:
@@ -98,6 +108,8 @@ def sc_cot(problem:Problem, problem_example:Problem, llm:LLM, nb_propositions:in
         if save_folder:
                 with open(os.path.join(save_folder, f"llm_{i+1}", "sc_cot", f"prompt_3.md"), 'w') as f:
                     f.write(answer)
+        if count_nb_tokens:
+            count_tokens_sc_soc[i] += int(count_tokens(" ".join([message["content"] for message in llm.messages])))
 
     # Step 4 : Create and find rules about the domain and the problem
     ### Note: Maybe not super useful ...
@@ -108,6 +120,8 @@ def sc_cot(problem:Problem, problem_example:Problem, llm:LLM, nb_propositions:in
         if save_folder:
                 with open(os.path.join(save_folder, f"llm_{i+1}", "sc_cot", f"prompt_4.md"), 'w') as f:
                     f.write(answer)
+        if count_nb_tokens:
+            count_tokens_sc_soc[i] += int(count_tokens(" ".join([message["content"] for message in llm.messages])))
 
     # Step 5: Focus and clearly describe separately the initial state and the goal state
     with open("prompts_ours/prompt_1_step_5.txt", 'r') as f:
@@ -117,6 +131,8 @@ def sc_cot(problem:Problem, problem_example:Problem, llm:LLM, nb_propositions:in
         if save_folder:
                 with open(os.path.join(save_folder, f"llm_{i+1}", "sc_cot", f"prompt_5.md"), 'w') as f:
                     f.write(answer)
+        if count_nb_tokens:
+            count_tokens_sc_soc[i] += int(count_tokens(" ".join([message["content"] for message in llm.messages])))
 
     # Step 6: Generate the final PDDL proposition
     with open("prompts_ours/prompt_1_step_6.txt", 'r') as f:
@@ -130,6 +146,8 @@ def sc_cot(problem:Problem, problem_example:Problem, llm:LLM, nb_propositions:in
                 with open(os.path.join(save_folder, f"llm_{i+1}", "sc_cot", f"prompt_6.md"), 'w') as f:
                     f.write(answer)
         answers.append(answer)
+        if count_nb_tokens:
+            count_tokens_sc_soc[i] += int(count_tokens(" ".join([message["content"] for message in llm.messages])))
 
     # Convert the final answers to PDDL Problem
     pbs_pddl_generated = []
@@ -142,6 +160,12 @@ def sc_cot(problem:Problem, problem_example:Problem, llm:LLM, nb_propositions:in
         if save_folder:
             with open(os.path.join(save_folder, f"llm_{i+1}", "sc_cot", "generated_pddl_sc_cot.pddl"), 'w') as f:
                 f.write(pddl.get_pddl_representation())
+
+    # Count the number of tokens
+    if count_nb_tokens:
+        for i, llm in enumerate(llms):
+            with open(os.path.join(save_folder, f"llm_{i+1}", "sc_cot", "tokens_count.txt"), 'w') as f:
+                f.write("Number tokens used : "+ str(count_tokens_sc_soc[i]))
 
     return pbs_pddl_generated, llms
 
@@ -283,6 +307,8 @@ def feedback_questions(problem:Problem, problem_example:Problem, llm_for_feedbac
         - feedback
     """
 
+    llm_for_feedback.reset()
+
     # Collect the feedback prompt and fill it in with examples for CoT
     with open("prompts_ours/prompt_fb_questions.txt", "r") as f:
         prompt_fb = f.read()
@@ -412,7 +438,7 @@ def merge_pddls(problem, generated_problems, llm):
 
     return final_pddl
     
-def main(problem, problem_example, nb_propositions = 2, model = "gpt-4o", temperature = 0.7, save_folder=None, max_iter_fb_val = 3, max_iter_fb_questions = 1, max_iter_llm_judge = 1, seed = 42, temperature_merge = 0.1):
+def main(problem, problem_example, nb_propositions = 2, model = "gpt-4o", temperature = 0.7, save_folder=None, max_iter_fb_val = 3, max_iter_fb_questions = 1, max_iter_llm_judge = 1, seed = 42, temperature_merge = 0.1, count_nb_tokens = True):
     """
     Inputs:
         - problem: Problem
@@ -424,7 +450,7 @@ def main(problem, problem_example, nb_propositions = 2, model = "gpt-4o", temper
 
     # Step 1 - Generate multiple PDDL using Self-consistency Chain-of-Thought
     llm = LLM(model = model, temperature= temperature, seed=seed)
-    pbs_pddl_generated, llms = sc_cot(problem, problem_example, llm=llm, nb_propositions=nb_propositions, save_folder=save_folder)
+    pbs_pddl_generated, llms = sc_cot(problem, problem_example, llm=llm, nb_propositions=nb_propositions, save_folder=save_folder, count_nb_tokens=count_nb_tokens)
 
     for i, pb in enumerate(pbs_pddl_generated):
 
@@ -433,6 +459,7 @@ def main(problem, problem_example, nb_propositions = 2, model = "gpt-4o", temper
         nb_fb = 0
         feedbacks_val = []
         new_pddl_version = pb
+        count_nb_tokens_val = 0
 
         if save_folder:
             save_folder_val = os.path.join(save_folder, f"llm_{i+1}", "val")
@@ -464,8 +491,15 @@ def main(problem, problem_example, nb_propositions = 2, model = "gpt-4o", temper
                         f.write(feedback)
                     with open(os.path.join(save_folder_val, f"feedback_{nb_fb}_pddl_generated.pddl"), "w") as f:
                         f.write(new_pddl_version.get_pddl_representation())
+                
+                if count_nb_tokens:
+                    count_nb_tokens_val += int(count_tokens(" ".join([message["content"] for message in llms[i].messages])))
             else:
                 ok = True
+
+        if count_nb_tokens:
+            with open(os.path.join(save_folder_val, f"tokens_count.txt"), 'w') as f:
+                f.write("Number tokens : "+ str(count_nb_tokens_val))
 
         pbs_pddl_generated[i] = new_pddl_version
         
@@ -474,17 +508,20 @@ def main(problem, problem_example, nb_propositions = 2, model = "gpt-4o", temper
         nb_fb = 0
         feedbacks_questions = []
         new_pddl_version = pbs_pddl_generated[i]
+        count_nb_tokens_questions = 0
 
         if save_folder:
             save_folder_questions = os.path.join(save_folder, f"llm_{i+1}", "questions")
             if not(os.path.exists(save_folder_questions)):
                 os.makedirs(save_folder_questions)
-
+        
+        llm_for_feedback_questions = LLM(model=model, temperature=temperature, seed=seed)
         while not ok and nb_fb < max_iter_fb_questions:
-            feedback = feedback_questions(new_pddl_version, problem_example, llms[i])
+            feedback = feedback_questions(new_pddl_version, problem_example, llm_for_feedback_questions)
             feedbacks_questions.append(feedback)
-            
-            print("FEEDBACK QUESTIONS", feedback)
+
+            if count_nb_tokens:
+                count_nb_tokens_questions += int(count_tokens(" ".join([message["content"] for message in llm_for_feedback_questions.messages])))
 
             if feedback:
                 prompt_for_fb = "The problem PDDL needs to be improved. To do so, please use the following feedback to correct the current version of the PDDL.\n"
@@ -497,9 +534,17 @@ def main(problem, problem_example, nb_propositions = 2, model = "gpt-4o", temper
                         f.write(feedback)
                     with open(os.path.join(save_folder_questions, f"feedback_{nb_fb}_pddl_generated.pddl"), "w") as f:
                         f.write(new_pddl_version.get_pddl_representation())
+
+                if count_nb_tokens:
+                    count_nb_tokens_questions += int(count_tokens(" ".join([message["content"] for message in llms[i].messages])))
+
             else:
                 ok = True
-        
+
+        if count_nb_tokens:
+            with open(os.path.join(save_folder_questions, f"tokens_count.txt"), 'w') as f:
+                f.write("Number tokens : "+ str(count_nb_tokens_questions))   
+
         pbs_pddl_generated[i] = new_pddl_version
 
         # Step 4 - Validate the correctness using LLM-as-a-Judge
@@ -507,6 +552,7 @@ def main(problem, problem_example, nb_propositions = 2, model = "gpt-4o", temper
         nb_fb = 0
         feedbacks_questions = []
         new_pddl_version = pbs_pddl_generated[i]
+        count_nb_tokens_judge = 0
 
         if save_folder:
             save_folder_judge = os.path.join(save_folder, f"llm_{i+1}", "judge")
@@ -517,6 +563,9 @@ def main(problem, problem_example, nb_propositions = 2, model = "gpt-4o", temper
         while not ok and nb_fb < max_iter_llm_judge:
             feedback = llm_as_judge(new_pddl_version, problem_example, gt_description=problem.get_description_nl(), llm_judge=llm_judge)
             feedbacks_questions.append(feedback)
+
+            if count_nb_tokens:
+                count_nb_tokens_judge += int(count_tokens(" ".join([message["content"] for message in llm_judge.messages])))
 
             if feedback:
                 prompt_for_fb = "The problem PDDL needs to be improved. To do so, please use the following feedback to correct the current version of the PDDL.\n"
@@ -529,9 +578,17 @@ def main(problem, problem_example, nb_propositions = 2, model = "gpt-4o", temper
                         f.write(feedback)
                     with open(os.path.join(save_folder_judge, f"feedback_{nb_fb}_pddl_generated.pddl"), "w") as f:
                         f.write(new_pddl_version.get_pddl_representation())
+
+                if count_nb_tokens:
+                    count_nb_tokens_judge += int(count_tokens(" ".join([message["content"] for message in llms[i].messages])))
+                    
             else:
                 ok = True
         
+
+        with open(os.path.join(save_folder_judge, f"tokens_count.txt"), 'w') as f:
+            f.write("Number tokens : "+ str(count_nb_tokens_judge))
+
         pbs_pddl_generated[i] = new_pddl_version
 
         if save_folder:
@@ -549,6 +606,10 @@ def main(problem, problem_example, nb_propositions = 2, model = "gpt-4o", temper
             f.write(final_pddl.get_pddl_representation())
         path_merge_conv = os.path.join(save_folder, "merge_llm_conversation.md")
         llm_merge.save_discussion(path_merge_conv)
+    
+    if count_nb_tokens:
+        with open(os.path.join(save_folder, "tokens_count.txt"), 'w') as f:
+            f.write("Number tokens : "+ str(count_tokens(" ".join([message["content"] for message in llm_merge.messages]))))
 
     return final_pddl
     
@@ -563,7 +624,7 @@ if __name__ == "__main__":
     nb_propositions = 2
     
     # answers, pbs_pddl_generated = sc_cot(problem, domain, nb_propositions=nb_propositions, temperature=0.7, model="gpt-4o", save_folder="test_sc_cot")
-    final_pddl = main(problem, problem_example, nb_propositions=nb_propositions, temperature=0.7, model="gpt-4o", save_folder="experiments/run669/termes/p04", max_iter_fb_val=1, max_iter_fb_questions=1, max_iter_llm_judge=1, temperature_merge=0.1)
+    final_pddl = main(problem, problem_example, nb_propositions=nb_propositions, temperature=0.7, model="gpt-4o", save_folder="experiments/run670/termes/p04", max_iter_fb_val=1, max_iter_fb_questions=1, max_iter_llm_judge=1, temperature_merge=0.1)
     try:
         print(check_if_equivalent(final_pddl, problem))
     except:
