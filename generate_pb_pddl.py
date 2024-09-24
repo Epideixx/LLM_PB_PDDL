@@ -2,7 +2,7 @@ from LLM_plus_P import llm_plus_p
 from zero_shot import zero_shot_without_CoT, zero_shot_with_CoT
 from utils import run_planner
 from domains_problem import Problem, Domain, check_if_equivalent
-
+from ours import main as ours_main
 import os
 
 def postprocess(pddl_str:str):
@@ -11,7 +11,7 @@ def postprocess(pddl_str:str):
         pddl_str = pddl_str[start_index:]
     return pddl_str
 
-def generate_problem(domain, problem, domain_example, problem_example, method, run, alias, time_limit):
+def generate_problem(domain, problem, domain_example, problem_example, method, run, alias, time_limit, model = "gpt-4o", **kwargs):
 
     print("Domain: ", domain)
 
@@ -39,8 +39,8 @@ def generate_problem(domain, problem, domain_example, problem_example, method, r
     # Create the folders and paths for the results
     if method == "llm_plus_p" and domain == domain_example:
         method += "_ic"
-    problem_folder = f"./experiments/{method}/{domain.domain_name}/run{run}/problems/"
-    plan_folder    = f"./experiments/{method}/{domain.domain_name}/run{run}/plans/"
+    problem_folder = f"./experiments/run{run}/{method}/{domain.domain_name}/problems/"
+    plan_folder    = f"./experiments/run{run}/{method}/{domain.domain_name}/plans/"
 
     if not os.path.exists(problem_folder):
         os.system(f"mkdir -p {problem_folder}")
@@ -50,13 +50,15 @@ def generate_problem(domain, problem, domain_example, problem_example, method, r
     # Use one of the methods to generate the problem PDDL
     match method:
         case "llm_plus_p":
-            problem_pddl_generated = llm_plus_p(problem, problem_example)
+            problem_pddl_generated = llm_plus_p(problem, problem_example, model=model)
         case "llm_plus_p_ic":
-            problem_pddl_generated = llm_plus_p(problem, problem_example)
+            problem_pddl_generated = llm_plus_p(problem, problem_example, model=model)
         case "zero-shot-without-CoT":
-            problem_pddl_generated = zero_shot_without_CoT(problem)
+            problem_pddl_generated = zero_shot_without_CoT(problem, model=model)
         case "zero-shot-with-CoT":
-            problem_pddl_generated = zero_shot_with_CoT(problem)
+            problem_pddl_generated = zero_shot_with_CoT(problem, model=model)
+        case "ours":
+            problem_pddl_generated = ours_main(problem, problem_example, nb_propositions=kwargs["nb_propositions"], model=model, save_folder=os.path.join(problem_folder, problem.problem_name))
         case _:
             ValueError(f"Method {method} not implemented")
 
@@ -86,13 +88,13 @@ def generate_problem(domain, problem, domain_example, problem_example, method, r
 
 if __name__ == "__main__":
 
-    DOMAIN = "grippers"
-    PROBLEM = "p17"
-    DOMAIN_EXAMPLE = "grippers"
+    DOMAIN = "blocksworld"
+    PROBLEM = "p01"
+    DOMAIN_EXAMPLE = "logistics"
     PROBLEM_EXAMPLE = "p_example"
-    METHOD = "llm_plus_p"
+    METHOD = "ours"
     RUN = 0
     ALIAS = "lama"
     TIME_LIMIT = 200
 
-    generate_problem(DOMAIN, PROBLEM, DOMAIN_EXAMPLE, PROBLEM_EXAMPLE, METHOD, RUN, ALIAS, TIME_LIMIT)
+    generate_problem(DOMAIN, PROBLEM, DOMAIN_EXAMPLE, PROBLEM_EXAMPLE, METHOD, RUN, ALIAS, TIME_LIMIT, model = "gpt-4o-mini", nb_propositions=3)

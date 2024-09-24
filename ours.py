@@ -323,7 +323,7 @@ def feedback_questions(problem:Problem, problem_example:Problem, llm_for_feedbac
     with open("domains/logistics/p_example_wrong_2.txt", "r") as f:
         prompt_fb = prompt_fb.replace("[PB 2 FB]", f.read())
     prompt_fb = prompt_fb.replace("[PB CORRECT]", problem_example.get_pddl_representation())
-    prompt_fb = prompt_fb.replace("[DOMAIN PDDL]", domain.get_pddl_representation())
+    prompt_fb = prompt_fb.replace("[DOMAIN PDDL]", problem.domain.get_pddl_representation())
     prompt_fb = prompt_fb.replace("[PB NL]", problem.get_description_nl())
 
  
