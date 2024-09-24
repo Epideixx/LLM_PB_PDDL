@@ -59,6 +59,7 @@ def sc_cot(problem:Problem, problem_example:Problem, llm:LLM, nb_propositions:in
     answers = []
     domain = problem.domain
     domain_pddl = domain.get_pddl_representation()
+    domain_description = domain.get_description_nl()
     problem_nl = problem.get_description_nl()
     problem_pddl_example = problem_example.get_pddl_representation()
     problem_nl_example = problem_example.get_description_nl()
@@ -75,6 +76,7 @@ def sc_cot(problem:Problem, problem_example:Problem, llm:LLM, nb_propositions:in
     with open("prompts_ours/prompt_1_step_1.txt", 'r') as f:
         prompt_1 = f.read()
     prompt_1 = prompt_1.replace("[DOMAIN PDDL]", domain_pddl)
+    prompt_1 = prompt_1.replace("[DOMAIN DESCRIPTION]", domain_description)
     for i, llm in enumerate(llms):
         answer = llm.query(prompt_1)
         if save_folder:

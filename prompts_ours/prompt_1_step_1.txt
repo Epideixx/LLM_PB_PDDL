@@ -2,6 +2,9 @@ Given a domain PDDL, encoding a environment, I want you to extra some informatio
 Step 1. You will extract all the types, and describe each one of them with a short sentence
 Step 2. You will extract the predicates, write the number of arguments each take as well as the types of these arguments. Finally, you will also provide a short description for each of them. Please be sure to respect the order of the arguments. Be careful, you need to look at how the predicates are used in the actions to understand the arguments, and sometimes it may be counter-intuitive.
 
+Here is the natural language description of the domain, to give you a better understanding:
+[DOMAIN DESCRIPTION]
+
 Here is the domain PDDL:
 [DOMAIN PDDL]
 
