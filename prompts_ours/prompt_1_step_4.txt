@@ -1,2 +1,3 @@
 Now you have a better understanding of the domain and the problem we have to deal with, you will have to create and think about rules to write a problem PDDL in this domain, that you should follow.
 Please keep in relatively short, and focus on the rules about how and what you need to write for the problem PDDL.
+Do not write the problem PDDL now, just the rules.
