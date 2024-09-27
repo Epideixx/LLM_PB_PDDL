@@ -44,7 +44,7 @@ def pddl_problem_to_json(problem_pddl, problem_name):
     json_representation['init'] = []
     for init in problem.init:
         if isinstance(init, Not):
-            raise ValueError("There is a negated predicate in the initial state, with a 'not', which is not allowed in PDDL. Reminder: by default, non-mentioned predicates are assume to be false, so no need to explictly say it.")
+            raise ValueError(f"There is a 'not' predicate in the initial state:{init},  which is not allowed in PDDL. Reminder: by default, non-mentioned predicates are assume to be initialized as false, so please remove them.")
         else:
             json_representation['init'].append({str(init.name):{int(i): str(init_term) for i, init_term in enumerate(init.terms)}})
     # Extract the goal
@@ -406,21 +406,27 @@ def check_if_equivalent(problem1, problem2):
     taskPDDLTypes = problem1.getPDDLTypes()
     correctPDDLTypes = problem2.getPDDLTypes()
     if set(taskPDDLTypes) != set(correctPDDLTypes):
+        print("ok")
         return False
 
     taskPDDLObjects = problem1.getPDDLObjects()
     correctPDDLObjects = problem2.getPDDLObjects()
     if len(taskPDDLObjects) != len(correctPDDLObjects):
+        print("ok1")
         return False
 
     taskInitStateAtoms = problem1.getInitStateAtoms()
     correctInitStateAtoms = problem2.getInitStateAtoms()
     if len(taskInitStateAtoms) != len(correctInitStateAtoms):
+        print((taskInitStateAtoms))
+        print((correctInitStateAtoms))
+        print("ok2")
         return False
 
     taskGoalStateAtoms = problem1.getGoalStateAtoms()
     correctGoalStateAtoms = problem2.getGoalStateAtoms()
     if len(taskGoalStateAtoms) != len(correctGoalStateAtoms):
+        print("ok3")
         return False
 
     taskObjects = dict()

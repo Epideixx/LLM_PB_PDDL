@@ -9,7 +9,7 @@ Answer:
 
 Before you start, here are also some rules you need to know:
 - The objects cannot be number, like you cannot write 1 or 3 alone. So replace them by h1 and h3 instead or any other notation corresponing to the situation.
-- If the domain requires "typing", it is necessary to precise the types of the objects, and if it does not require "typing", you should not put the types, and only write the list of objects.
+- If the domain requires ":typing", it is required and expected to precise the types of the objects, and if it does not require ":typing", you should not put the types, and only write the list of objects.
 - Remember that no objects or predicates can simply be named "object".
 
 Now, it is your turn to translate the text into proper PDDL. 

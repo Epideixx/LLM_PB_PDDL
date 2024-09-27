@@ -6,10 +6,16 @@ import re
 import os
 
 def postprocess(raw_answer):
-    pattern = r"```(?:pddl|lisp)\s*([\s\S]*?)```"
+    pattern = r"```(?:pddl|lisp|plaintext)\s*([\s\S]*?)```"
     match = re.search(pattern, raw_answer)
+
+    pattern2 = r"```\s*([\s\S]*?)```"
+    match2 = re.search(pattern2, raw_answer)
+
     if match:
         return match.group(1)
+    elif match2:
+        return match2.group(1)
     else:
         return raw_answer
     
@@ -154,6 +160,7 @@ def sc_cot(problem:Problem, problem_example:Problem, llm:LLM, nb_propositions:in
     # Convert the final answers to PDDL Problem
     pbs_pddl_generated = []
     for i, llm in enumerate(llms):
+        print(answers[i])
         pddl = postprocess(answers[i])
         if pddl == None: 
             pddl = answers[i][-1]
@@ -193,6 +200,7 @@ def validator_pddl(problem_pddl:Problem):
     domain_json = domain.get_json_representation()
     is_typing = ":typing" in domain_json["requirements"]
     feedback = []
+    check_is_typing = True
 
     ### OBJECTS
     objects_in_pb = pb_json['objects']
@@ -202,13 +210,18 @@ def validator_pddl(problem_pddl:Problem):
         list_types.extend(v)
     
     for obj_type, object_list in objects_in_pb.items():
-        if is_typing:
+        # Check that if "typing", the objects all have a type
+        if is_typing and 'null' in objects_in_pb:
+            feedback.append(f"The domain has the requirement 'typing' which means all the defined objects must be associated to a type, as mentioned in the domain PDDL.")
+            check_is_typing = False
+            break
+        if is_typing and check_is_typing:
             # Checks if any objects use undefined types.
             if obj_type not in list_types:
                 feedback.append(f"The object type {obj_type} is not defined in the types.")
                 break
         for obj in object_list:
-            if is_typing:
+            if is_typing and check_is_typing:
                 # Checks if any object name is a type.
                 if obj in list_types:
                     feedback.append(f"The object {obj} has a name of a type, which is not allowed.")
@@ -254,7 +267,7 @@ def validator_pddl(problem_pddl:Problem):
                     feedback.append(f"In predicate {predicate_name} in the init block, the object {object_name} in argument has not been defined.")
                     break
                 # Check that all predicate argument types are valid.
-                if is_typing:
+                if is_typing and check_is_typing:
                     if list(dict_defined_predicates[predicate_name].values())[int(pos)] not in objects_predecessors[reversed_dict_objects_pb[object_name]]:
                         feedback.append(f"In predicate {predicate_name} in the init block, the object {object_name} does not have the correct type.")
                         break
@@ -282,7 +295,7 @@ def validator_pddl(problem_pddl:Problem):
                     feedback.append(f"In predicate {predicate_name} in the goal block, the object {object_name} in argument has not been defined.")
                     break
                 # Check that all predicate argument types are valid.
-                if is_typing:
+                if is_typing and check_is_typing:
                     if list(dict_defined_predicates[predicate_name].values())[int(pos)] not in objects_predecessors[reversed_dict_objects_pb[object_name]]:
                         feedback.append(f"In predicate {predicate_name} in the goal block, the object {object_name} in argument has not been defined.")
                         break
@@ -375,8 +388,6 @@ def llm_as_judge(problem:Problem, problem_example:Problem, gt_description:str, l
     problem_description_generated = problem.get_description_nl()
     problem_description_gt = gt_description
 
-    print(problem_description_generated)
-
     # Reset LLM so it doesn't know about the original PDDL
     llm_judge.reset()
 
@@ -430,10 +441,11 @@ def merge_pddls(problem, generated_problems, llm):
         prompt += f"Potential translation {i+1}:\n"
         prompt += pb.get_pddl_representation()
         prompt += "\n\n"
-    prompt += "Please make the best out of these translations to generate the final PDDL translation."
+    prompt += "Please make the best out of these translations to generate the final PDDL translation. Also, remember that the more information there is does not mean the better, it varies from case to case."
 
     # Prompt the LLM
     raw_answer = llm.query(prompt)
+    print("LLM MERGE RAW ANSWER: " + raw_answer)
     final_pddl_str = postprocess_translation(raw_answer)
     final_pddl_str = postprocess(final_pddl_str)
     final_pddl = Problem(pddl_string=final_pddl_str, problem_name=problem.problem_name, domain = problem.get_domain(), description_nl=problem.get_description_nl())
@@ -471,7 +483,6 @@ def main(problem, problem_example, nb_propositions = 2, model = "gpt-4o", temper
         while not ok and nb_fb < max_iter_fb_val:
             if isinstance(pb, Exception):
                 feedback = "The following exception occurred: " + str(pb)
-                ok = False
             else:
                 try:
                     feedback = validator_pddl(new_pddl_version)
@@ -482,9 +493,10 @@ def main(problem, problem_example, nb_propositions = 2, model = "gpt-4o", temper
             print("FEEDBACK VAL", feedback)
 
             if feedback:
+                feedback = str(feedback)
                 with open("prompts_ours/prompt_fb_val.txt", "r") as f:
                     prompt_fb = f.read()
-                prompt_fb = prompt_fb.replace("[FEEDBACKS]", feedback)
+                prompt_fb = prompt_fb.replace("[FEEDBACK]", feedback)
                 new_pddl_version = generate_pddl_from_feedback(problem, prompt_fb, llms[i])
                 nb_fb += 1
 
@@ -580,7 +592,8 @@ def main(problem, problem_example, nb_propositions = 2, model = "gpt-4o", temper
                         f.write(feedback)
                     with open(os.path.join(save_folder_judge, f"feedback_{nb_fb}_pddl_generated.pddl"), "w") as f:
                         f.write(new_pddl_version.get_pddl_representation())
-
+                    path_discussion = os.path.join(save_folder_judge, f"feedback_{nb_fb}_whole_discussion.txt")
+                    llm_judge.save_discussion(path_discussion)
                 if count_nb_tokens:
                     count_nb_tokens_judge += int(count_tokens(" ".join([message["content"] for message in llms[i].messages])))
                     

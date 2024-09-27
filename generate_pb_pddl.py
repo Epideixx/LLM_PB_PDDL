@@ -51,23 +51,26 @@ def generate_problem(domain, problem, domain_example, problem_example, method, r
     match method:
         case "llm_plus_p":
             problem_pddl_generated = llm_plus_p(problem, problem_example, model=model)
+            problem_pddl_generated = postprocess(problem_pddl_generated)
+            problem_generated = Problem(pddl_string=problem_pddl_generated, problem_name=problem, domain=domain)
         case "llm_plus_p_ic":
             problem_pddl_generated = llm_plus_p(problem, problem_example, model=model)
+            problem_pddl_generated = postprocess(problem_pddl_generated)
+            problem_generated = Problem(pddl_string=problem_pddl_generated, problem_name=problem, domain=domain)
         case "zero-shot-without-CoT":
             problem_pddl_generated = zero_shot_without_CoT(problem, model=model)
+            problem_pddl_generated = postprocess(problem_pddl_generated)
+            problem_generated = Problem(pddl_string=problem_pddl_generated, problem_name=problem, domain=domain)
         case "zero-shot-with-CoT":
             problem_pddl_generated = zero_shot_with_CoT(problem, model=model)
+            problem_pddl_generated = postprocess(problem_pddl_generated)
+            problem_generated = Problem(pddl_string=problem_pddl_generated, problem_name=problem, domain=domain)
         case "ours":
-            problem_pddl_generated = ours_main(problem, problem_example, nb_propositions=kwargs["nb_propositions"], model=model, save_folder=os.path.join(problem_folder, problem.problem_name))
+            problem_generated = ours_main(problem, problem_example, nb_propositions=kwargs["nb_propositions"], model=model, save_folder=os.path.join(problem_folder, problem.problem_name))
         case _:
             ValueError(f"Method {method} not implemented")
-
-    # Postprocess the PDDL
-    problem_pddl_generated = postprocess(problem_pddl_generated)
     
-    # Convert this to a Problem object and save the result
     path_to_save = os.path.join(problem_folder, problem.problem_name + ".pddl")
-    problem_generated = Problem(pddl_string=problem_pddl_generated, problem_name=problem, domain=domain)
     problem_generated.save(path_to_save, type = "pddl")
 
     # Compare this problem PDDL to the ground truth problem
@@ -88,13 +91,13 @@ def generate_problem(domain, problem, domain_example, problem_example, method, r
 
 if __name__ == "__main__":
 
-    DOMAIN = "blocksworld"
-    PROBLEM = "p01"
+    DOMAIN = "monkey_banana"
+    PROBLEM = "p05"
     DOMAIN_EXAMPLE = "logistics"
     PROBLEM_EXAMPLE = "p_example"
     METHOD = "ours"
-    RUN = 0
+    RUN = 1000
     ALIAS = "lama"
     TIME_LIMIT = 200
 
-    generate_problem(DOMAIN, PROBLEM, DOMAIN_EXAMPLE, PROBLEM_EXAMPLE, METHOD, RUN, ALIAS, TIME_LIMIT, model = "gpt-4o-mini", nb_propositions=3)
+    generate_problem(DOMAIN, PROBLEM, DOMAIN_EXAMPLE, PROBLEM_EXAMPLE, METHOD, RUN, ALIAS, TIME_LIMIT, model = "gpt-4o", nb_propositions=3)
